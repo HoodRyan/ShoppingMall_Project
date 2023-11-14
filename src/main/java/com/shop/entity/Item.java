@@ -27,5 +27,5 @@ public class Item {
     private LocalDateTime regTime;  //등록 시간
 
     private LocalDateTime updateTime;   //수정 시간
-    
+
 }
