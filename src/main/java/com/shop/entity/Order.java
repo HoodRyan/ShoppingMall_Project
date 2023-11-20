@@ -27,10 +27,12 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;    // 주문 상태
 
-    @OneToMany(mappedBy = "order")  // 주문 상품 엔티티와 일대다 매핑
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)  // 주문 상품 엔티티와 일대다 매핑
     private List<OrderItem> orderItems = new ArrayList<>(); // 하나의 주문이 여러 개의 주문 상품을 가지니 List 자료형을 사용해 매핑
 
     private LocalDateTime regTime;
 
     private LocalDateTime updateTime;
+
+
 }
