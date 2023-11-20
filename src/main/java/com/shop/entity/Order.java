@@ -18,7 +18,7 @@ public class Order {
     @Column(name = "order_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;  // 한 명의 회원은 여러 번 주문을 할 수 있으므로 다대일 단방향 매핑
 
@@ -27,7 +27,7 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;    // 주문 상태
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)  // 주문 상품 엔티티와 일대다 매핑
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)  // 주문 상품 엔티티와 일대다 매핑
     private List<OrderItem> orderItems = new ArrayList<>(); // 하나의 주문이 여러 개의 주문 상품을 가지니 List 자료형을 사용해 매핑
 
     private LocalDateTime regTime;
