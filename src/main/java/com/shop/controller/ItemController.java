@@ -63,7 +63,7 @@ public class ItemController {
     public String itemDtl(@PathVariable("itemId") Long itemId, Model model){
 
         try {
-            ItemFormDto itemFormDto = itemService.getItemDt1(itemId);   // 조회한 상품 데이터를 모델에 담아서 뷰로 전달
+            ItemFormDto itemFormDto = itemService.getItemDtl(itemId);   // 조회한 상품 데이터를 모델에 담아서 뷰로 전달
             model.addAttribute("itemFormDto",itemFormDto);
         }catch (EntityNotFoundException e){ // 상품 엔티티가 존재하지 않을 경우 에러 메시지 + 상품 등록 페이지로 이동
             model.addAttribute("errorMessage","존재하지 않는 상품 입니다.");
@@ -109,6 +109,13 @@ public class ItemController {
         model.addAttribute("itemSearchDto", itemSearchDto); // 페이지 전환 시 기존 검색 조건을 유지한 채 이동
         model.addAttribute("maxPage",5); // 상품 관리 메뉴 하단에 보여줄 페이지 번호의 최대 개수
         return "item/itemMng";
+    }
+
+    @GetMapping(value = "/item/{itemId}")
+    public String itemDtl(Model model, @PathVariable("itemId") Long itemId){
+        ItemFormDto itemFormDto = itemService.getItemDtl(itemId);
+        model.addAttribute("item", itemFormDto);
+        return "item/itemDtl";
     }
 
 }

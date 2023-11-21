@@ -50,7 +50,7 @@ public class ItemService {
     }
 
     @Transactional(readOnly = true) // 상품 데이터를 읽어오는 트랜잭셜을 읽기 전용 설정. jpa가 더티체킹하지 않아 성능 향상
-    public ItemFormDto getItemDt1(Long itemId){
+    public ItemFormDto getItemDtl(Long itemId){
 
         List<ItemImg> itemImgList =
                 itemImgRepository.findByItemIdOrderByIdAsc(itemId); //해당 상품 이미지 조회. 아이디 오름차순으로 가져오기
