@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "orders") // 정렬할 때 사용하는 "order" 키워드가 있으므로 "orders"를 지정
 @Getter @Setter
-public class Order {
+public class Order extends BaseEntity{
 
     @Id @GeneratedValue
     @Column(name = "order_id")
@@ -33,6 +33,30 @@ public class Order {
     private LocalDateTime regTime;
 
     private LocalDateTime updateTime;
+
+    public void addOrderItem(OrderItem orderItem){ // orderItems에는 주문 상품 정보를 담음
+        orderItems.add(orderItem);
+        orderItem.setOrder(this); // Order 과 OrderItem 엔티티가 양방향 관계 이므로, 객체를 세팅
+    }
+
+    public static Order createOrder(Member member, List<OrderItem> orderItemList){
+        Order order = new Order();
+        order.setMember(member); // 상품을 주문한 회원의 정보를 세팅
+        for (OrderItem orderItem : orderItemList){ // 상품 페이지에서는 1개의 상품을 주문, 장바구니 페이지에선 여러 개의 상품 주문 가능
+            order.addOrderItem(orderItem);
+        }
+        order.setOrderStatus(OrderStatus.ORDER);
+        order.setOrderDate(LocalDateTime.now());
+        return order;
+    }
+
+    public int getTotalPrice(){ // 총 주문 금액 구하는 메소드
+        int totalPrice = 0;
+        for(OrderItem orderItem : orderItems){
+            totalPrice += orderItem.getTotalPrice();
+        }
+        return totalPrice;
+    }
 
 
 }
