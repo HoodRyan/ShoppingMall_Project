@@ -66,4 +66,19 @@ public class OrderController {
         model.addAttribute("maxPage", 5);
         return "order/orderHist";
     }
+
+    /**
+     * 주문 취소 로직 호출 메소드
+     */
+    @PostMapping("/order/{orderId}/cancel")
+    public @ResponseBody ResponseEntity cancelOrder(@PathVariable("orderId") Long orderId, Principal principal){
+        // 자바 스크립트에서 취소할 주문 번호는 조작이 가능하므로
+        // 다른 사람의 주문을 취소하지 못하도록 주문 취소 권한 검사를 진행
+        if (!orderService.validateorder(orderId, principal.getName())){
+            return new ResponseEntity<String>("주문 취소 권한이 없습니다.", HttpStatus.FORBIDDEN);
+        }
+
+        orderService.cancelOrder(orderId); // 주문 취소 로직을 호출
+        return new ResponseEntity<Long>(orderId, HttpStatus.OK);
+    }
 }
