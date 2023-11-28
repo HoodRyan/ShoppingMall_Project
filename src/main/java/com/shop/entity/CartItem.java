@@ -3,12 +3,11 @@ package com.shop.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Getter @Setter
 @Table(name = "cart_item")
-public class CartItem {
+public class CartItem extends BaseEntity{
 
     @Id
     @GeneratedValue
@@ -25,7 +24,7 @@ public class CartItem {
 
     private int count;  // 같은 상품을 장바구니에 몇 개 담을지 저장
 
-    public static CartItem createCarteItem(Cart cart, Item item, int count){
+    public static CartItem createCartItem(Cart cart, Item item, int count){
         CartItem cartItem = new CartItem();
         cartItem.setCart(cart);
         cartItem.setItem(item);
@@ -36,5 +35,10 @@ public class CartItem {
     // 장바구니에 기존에 담겨 있는 상품인데, 해당 상품을 추가로 장바구니에 담을 때 기존 수량에 현재 담을 수량을 더해줄 때 사용하는 메소드
     public void addCount(int count){
         this.count += count;
+    }
+
+    // 장바구니 상품 수량 변경 메소드
+    public void updateCount(int count){
+        this.count = count;
     }
 }
