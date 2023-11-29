@@ -92,4 +92,24 @@ public class OrderService {
         order.cancelOrder(); // 주문 취소 상태로 변경 시 변경 감지 기능에 의해 트랜잭션이 끝날 때 update 쿼리 실행
     }
 
+    // 장바구니에서 주문할 상품 데이터를 전달받아서 주문을 생성하는 로직
+    public Long orders(List<OrderDto> orderDtoList, String email){
+
+        Member member = memberRepository.findByEmail(email);
+        List<OrderItem> orderItemList = new ArrayList<>();
+
+        for (OrderDto orderDto : orderDtoList){ // 주문할 상품 리스트를 생성
+            Item item = itemRepository.findById(orderDto.getItemId())
+                    .orElseThrow(EntityNotFoundException::new);
+
+            OrderItem orderItem = OrderItem.createOrderItem(item, orderDto.getCount());
+            orderItemList.add(orderItem);
+        }
+
+        Order order = Order.createOrder(member, orderItemList); // 현재 로그인한 회원과 주문 상품 목록을 이용하여 주문 엔티티 생성
+        orderRepository.save(order); // 주문 데이터를 저장
+
+        return order.getId();
+    }
+
 }
